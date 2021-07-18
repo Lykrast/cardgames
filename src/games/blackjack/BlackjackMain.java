@@ -9,7 +9,7 @@ public class BlackjackMain {
 		BlackjackPlayer bot4 = new BlackjackBotRandom("75%", 0.75);
 		Blackjack game = new Blackjack(bot1, bot2, bot3, bot4);
 		game.setVerbose(true);
-		game.game();
+		System.out.println(game.game());
 	}
 
 }

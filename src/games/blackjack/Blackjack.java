@@ -1,13 +1,15 @@
 package games.blackjack;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import cards.Card;
 import cards.Deck;
 import cards.FrenchNumber;
 import cards.FrenchSuit;
-import games.Player;
+import games.GameResult;
+import games.Result;
 
 public class Blackjack {
 	private Deck<FrenchSuit, FrenchNumber> deck;
@@ -46,7 +48,11 @@ public class Blackjack {
 		dealer.clear();
 	}
 	
-	private int score(List<Card<FrenchSuit, FrenchNumber>> hand, boolean soft) {
+	public static int score(List<Card<FrenchSuit, FrenchNumber>> hand) {
+		return score(hand, false);
+	}
+	
+	public static int score(List<Card<FrenchSuit, FrenchNumber>> hand, boolean soft) {
 		int score = 0;
 		int aces = 0;
 		
@@ -72,22 +78,102 @@ public class Blackjack {
 		for (int i = 0; i < hands.length; i++) {
 			hands[i].add(deck.draw());
 			hands[i].add(deck.draw());
-			if (verbose) System.out.println(players[i].getName() + " dealt " + hands[i] + " (" + score(hands[i], false) + ")");
+			if (verbose) System.out.println(players[i].getName() + " dealt " + hands[i] + " (" + score(hands[i]) + ")");
 		}
 		dealer.add(deck.draw());
 		dealer.add(deck.draw());
 		if (verbose) System.out.println("Dealer has " + dealer.get(0));
 	}
 	
-	public List<Player> game() {
-		List<Player> winners = new ArrayList<>();
+	private int dealerPlays() {
+		int score = score(dealer);
+		if (verbose) {
+			System.out.println("------");
+			System.out.println("Dealer's turn");
+			System.out.println(dealer + " (" + score + ")");
+		}
+		
+		//Blackjack
+		if (score == 21) {
+			if (verbose) System.out.println("Blackjack!");
+			//Blackjack beats a normal 21
+			return 22;
+		}
+		else {
+			while (score < 17) {
+				dealer.add(deck.draw());
+				score = score(dealer);
+				if (verbose) {
+					System.out.println("Hit");
+					System.out.println(dealer + " (" + score + ")");
+				}
+				//Bust
+				if (score > 21) {
+					if (verbose) System.out.println("Bust!");
+					score = -1;
+					break;
+				}
+			}
+			if (verbose && score > 0) System.out.println("Stand");
+		}
+		
+		return score;
+	}
+	
+	public List<GameResult> game() {
+		List<GameResult> results = new ArrayList<>();
 		deck.shuffle();
 		if (verbose) System.out.println("New game");
 		
 		deal();
 		
+		//Play
+		int[] scores = new int[players.length];
+		Card<FrenchSuit, FrenchNumber> dealerCard = dealer.get(0);
+		for (int i = 0; i < players.length; i++) {
+			BlackjackPlayer player = players[i];
+			List<Card<FrenchSuit, FrenchNumber>> hand = hands[i];
+			scores[i] = score(hand);
+			if (verbose) {
+				System.out.println("------");
+				System.out.println(player.getName() + " turn");
+				System.out.println(hand + " (" + scores[i] + ")");
+			}
+			//Blackjack
+			if (scores[i] == 21) {
+				if (verbose) System.out.println("Blackjack!");
+				//Blackjack beats a normal 21
+				scores[i] = 22;
+			}
+			else {
+				while (player.hit(Collections.unmodifiableList(hand), dealerCard)) {
+					hand.add(deck.draw());
+					scores[i] = score(hand);
+					if (verbose) {
+						System.out.println("Hit");
+						System.out.println(hand + " (" + scores[i] + ")");
+					}
+					//Bust
+					if (scores[i] > 21) {
+						if (verbose) System.out.println("Bust!");
+						scores[i] = -1;
+						break;
+					}
+					else if (scores[i] == 21) break;
+				}
+				if (verbose && scores[i] > 0) System.out.println("Stand");
+			}
+		}
+		
+		int dealerScore = dealerPlays();
+		for (int i = 0; i < players.length; i++) {
+			if (scores[i] > dealerScore) results.add(new GameResult(players[i], Result.WIN));
+			else if (dealerScore > 0 && scores[i] == dealerScore) results.add(new GameResult(players[i], Result.DRAW));
+			else results.add(new GameResult(players[i], Result.LOOSE));
+		}
+		
 		reset();
-		return winners;
+		return results;
 	}
 
 }
