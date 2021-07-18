@@ -46,11 +46,33 @@ public class Blackjack {
 		dealer.clear();
 	}
 	
+	private int score(List<Card<FrenchSuit, FrenchNumber>> hand, boolean soft) {
+		int score = 0;
+		int aces = 0;
+		
+		for (Card<FrenchSuit, FrenchNumber> card : hand) {
+			FrenchNumber num = card.number();
+			if (num.isFace()) score += 10;
+			else score += num.value();
+			
+			if (num == FrenchNumber.ACE) aces += 1;
+		}
+		
+		if (!soft) {
+			while (aces > 0 && score <= 11) {
+				score += 10;
+				aces--;
+			}
+		}
+		
+		return score;
+	}
+	
 	private void deal() {
 		for (int i = 0; i < hands.length; i++) {
 			hands[i].add(deck.draw());
 			hands[i].add(deck.draw());
-			if (verbose) System.out.println(players[i].getName() + " dealt " + hands[i]);
+			if (verbose) System.out.println(players[i].getName() + " dealt " + hands[i] + " (" + score(hands[i], false) + ")");
 		}
 		dealer.add(deck.draw());
 		dealer.add(deck.draw());

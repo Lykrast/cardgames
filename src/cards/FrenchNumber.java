@@ -20,4 +20,8 @@ public enum FrenchNumber {
 	public boolean isFace() {
 		return this == JACK || this == QUEEN || this == KING;
 	}
+	
+	public int value() {
+		return ordinal() + 1;
+	}
 }
