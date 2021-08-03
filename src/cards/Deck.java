@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class Deck<S, N> {
+public class Deck<S extends Comparable<S>, N extends Comparable<N>> {
 	private List<Card<S, N>> cards;
 	
 	public Deck() {
@@ -29,6 +29,10 @@ public class Deck<S, N> {
 	
 	public Card<S, N> draw() {
 		return cards.remove(0);
+	}
+	
+	public Card<S, N> peek() {
+		return cards.get(0);
 	}
 	
 	public void fill(S[] suits, N[] numbers) {
