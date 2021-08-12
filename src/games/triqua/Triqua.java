@@ -99,6 +99,8 @@ public class Triqua {
 		}
 		//Cash in the tris for the last accumulator since it didn't get stopped by a conflicting card
 		makeTris(combi, blanks, accumulator);
+		//Go for streaks
+		Collections.sort(hand, SUIT_NUMBER);
 		
 		return combi;
 	}
