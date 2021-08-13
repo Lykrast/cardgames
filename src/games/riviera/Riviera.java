@@ -27,7 +27,8 @@ public class Riviera implements Game {
 	//Each quadruple is twice the number (quadruple 4 gives 8...)
 	//Each card of the current atout suit gives 2 points
 	//If you get 8 of the same suit, 40 points (can get multiple times)
-	//If you get at least one of each number (1..12) 60 points
+	//Longest straight of numbers of at least 3 is 2 per length (if longest is 3,4,5,6,7, it gives 10 points)
+	//If longest straight is 12 (longest possible), then it gives 60 instead
 	private Deck<FantasySuit, FantasyNumber> deck;
 	private RivieraPlayer[] players;
 	private List<Card<FantasySuit, FantasyNumber>>[] hands;
@@ -182,21 +183,23 @@ public class Riviera implements Game {
 			if (countSuit[i] >= 8) totalSuits += 40;
 		}
 		
-		//Numbers
-		boolean validated = true;
+		//Straights
+		int longest = -1;
+		int current = 0;
 		for (int i = 0; i < hasNumber.length; i++) {
-			if (!hasNumber[i]) {
-				validated = false;
-				break;
+			if (hasNumber[i]) {
+				current += 1;
+				if (current > longest) longest = current;
 			}
+			else current = 0;
 		}
-		if (validated) totalNumbers += 60;
+		if (longest >= 3) totalNumbers += longest >= 12 ? 5*longest : 2*longest;
 		
 		if (verbose) {
 			System.out.println("Matches - " + totalTriples);
 			System.out.println("Atout - " + totalAtouts);
+			System.out.println("Highest straight - " + totalNumbers);
 			System.out.println("Dominant suits - " + totalSuits);
-			System.out.println("Complete numbers - " + totalNumbers);
 			System.out.println("Total - " + (totalTriples + totalNumbers + totalSuits + totalAtouts));
 		}
 		
