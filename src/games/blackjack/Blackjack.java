@@ -8,10 +8,11 @@ import cards.Card;
 import cards.Deck;
 import cards.FrenchNumber;
 import cards.FrenchSuit;
+import games.Game;
 import games.GameResult;
 import games.Result;
 
-public class Blackjack {
+public class Blackjack implements Game {
 	private Deck<FrenchSuit, FrenchNumber> deck;
 	private BlackjackPlayer[] players;
 	private List<Card<FrenchSuit, FrenchNumber>>[] hands;
@@ -35,6 +36,7 @@ public class Blackjack {
 		}
 	}
 	
+	@Override
 	public void setVerbose(boolean verbose) {
 		this.verbose = verbose;
 	}
@@ -120,6 +122,7 @@ public class Blackjack {
 		return score;
 	}
 	
+	@Override
 	public List<GameResult> game() {
 		List<GameResult> results = new ArrayList<>();
 		deck.shuffle();

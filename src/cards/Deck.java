@@ -24,7 +24,7 @@ public class Deck<S extends Comparable<S>, N extends Comparable<N>> {
 	}
 	
 	public void addAll(List<Card<S, N>> cards) {
-		cards.addAll(cards);
+		this.cards.addAll(cards);
 	}
 	
 	public Card<S, N> draw() {

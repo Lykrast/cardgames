@@ -10,9 +10,10 @@ import cards.CardComparator;
 import cards.Deck;
 import cards.FantasyNumber;
 import cards.FantasySuit;
+import games.Game;
 import games.GameResult;
 
-public class Triqua {
+public class Triqua implements Game {
 	//Made up fantasy game
 	//Combinations:
 	//3 of same number = 3 points
@@ -41,6 +42,7 @@ public class Triqua {
 		this(1, p1, p2);
 	}
 	
+	@Override
 	public void setVerbose(boolean verbose) {
 		this.verbose = verbose;
 	}
@@ -194,6 +196,7 @@ public class Triqua {
 		}
 	}
 	
+	@Override
 	public List<GameResult> game() {
 		List<GameResult> results = new ArrayList<>();
 		deck.shuffle();

@@ -1,5 +1,7 @@
 package games.blackjack;
 
+import games.Game;
+
 public class BlackjackMain {
 
 	public static void main(String[] args) {
@@ -7,7 +9,7 @@ public class BlackjackMain {
 		BlackjackPlayer bot2 = new BlackjackBotRandom("25%", 0.25);
 		BlackjackPlayer bot3 = new BlackjackBotRandom("50%", 0.5);
 		BlackjackPlayer bot4 = new BlackjackBotRandom("75%", 0.75);
-		Blackjack game = new Blackjack(bot1, bot2, bot3, bot4);
+		Game game = new Blackjack(bot1, bot2, bot3, bot4);
 		game.setVerbose(true);
 		System.out.println(game.game());
 	}
