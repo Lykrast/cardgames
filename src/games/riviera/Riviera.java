@@ -16,7 +16,7 @@ import games.Result;
 
 public class Riviera implements Game {
 	//Fantasy game
-	//2 players, set aside top card for atout suit, 10 cards in each hand, 10 cards in the river visible to each player, reveal atout
+	//2 players, set aside top card for atout suit, 10 cards in each hand, 10 cards in the river visible to each player, reveal atout (8 std)
 	//Each turn, turn top card of deck to add to river, then fish or discard
 	//To fish, put down a card from hand with a card in the river with same number or suit, then add both to your bank
 	//To discard, add a card from your hand to the river, not adding it to your bank
@@ -26,9 +26,9 @@ public class Riviera implements Game {
 	//Each triple number gets point equal to its number (triple 4 gives 4, triple 12 gives 12), dragon and flower are 12
 	//Each quadruple is twice the number (quadruple 4 gives 8...)
 	//Each card of the current atout suit gives 2 points
-	//If you get 8 of the same suit, 40 points (can get multiple times)
+	//If you get 8 of the same suit, 40 points (can get multiple times) (for standard it's 7 and 35)
 	//Longest straight of numbers of at least 3 is 2 per length (if longest is 3,4,5,6,7, it gives 10 points)
-	//If longest straight is 12 (longest possible), then it gives 60 instead
+	//If longest straight is 12 (longest possible), then it gives 60 instead (for standard it's 50)
 	private Deck<FantasySuit, FantasyNumber> deck;
 	private RivieraPlayer[] players;
 	private List<Card<FantasySuit, FantasyNumber>>[] hands;
