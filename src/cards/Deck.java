@@ -19,6 +19,10 @@ public class Deck<S extends Comparable<S>, N extends Comparable<N>> {
 		return cards.size();
 	}
 	
+	public boolean hasCards() {
+		return !cards.isEmpty();
+	}
+	
 	public void add(Card<S, N> card) {
 		cards.add(card);
 	}

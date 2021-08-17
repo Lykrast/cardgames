@@ -126,6 +126,7 @@ public class Blackjack implements Game {
 	public List<GameResult> game() {
 		List<GameResult> results = new ArrayList<>();
 		deck.shuffle();
+		for (int i = 0; i < players.length; i++) players[i].resetState();
 		if (verbose) System.out.println("New game");
 		
 		deal();

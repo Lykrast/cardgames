@@ -200,13 +200,14 @@ public class Triqua implements Game {
 	public List<GameResult> game() {
 		List<GameResult> results = new ArrayList<>();
 		deck.shuffle();
+		for (int i = 0; i < players.length; i++) players[i].resetState();
 		if (verbose) System.out.println("New game");
 		
 		dealHands();
 		
 		int endOnNext = -1;
 		boolean end = false;
-		while (deck.count() > 0 && !end) {
+		while (deck.hasCards() && !end) {
 			for (int i = 0; i < players.length; i++) {
 				if (i == endOnNext) {
 					end = true;
